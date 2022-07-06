@@ -29,7 +29,7 @@ spec:
             value: testdatabase
           - name: testpassword
             valueFrom:
-              name: PG
+              name: pg
               key: password
         name: postgres
         ports:
