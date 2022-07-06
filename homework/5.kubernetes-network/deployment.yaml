@@ -27,11 +27,11 @@ spec:
             value: testuser 
           - name: POSTGRES_DB
             value: testdatabase
-          - name: testpassword
+          - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: pg
-                key: password
+               name: pg
+               key: password
         name: postgres
         ports:
         - containerPort: 5432
@@ -45,7 +45,33 @@ spec:
         volumeMounts:
         - name: pgdata
           mountPath: /var/lib/postgresql/data
+      - image: redmine:4.1.1
+        env:
+          - name: REDMINE_DB_USERNAME 
+            value: testuser
+          - name: REDMINE_DB_POSTGRES
+            value: testdatabase
+          - name: REDMINE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg
+                key: password
+          - name: REDMINE_SECRET_KEY_BASE 
+            valueFrom:
+              secretKeyRef:
+               name: pg
+               key: secret
+        name: redmine
+        ports:
+        - containerPort: 3000 
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
       volumes:
       - name: pgdata
         persistentVolumeClaim:
-          claimName: PGVolume
+          claimName: pgvolume
